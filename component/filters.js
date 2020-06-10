@@ -55,7 +55,6 @@ export default class Filter extends Component {
 
         let {filters} = this.state;
         let result = [];
-        console.log(filters)
         for(let item in filters){
             if(filters[item].checked == true){
                 result.push(filters[item].label);

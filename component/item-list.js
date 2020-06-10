@@ -1,46 +1,87 @@
 import React, { Component } from 'react';
-import { Text, View } from "react-native";
+import { Text, View, ScrollView, Image, StyleSheet } from "react-native";
 import CocktailDB from './cocktailDB';
+
+
+const styles = StyleSheet.create({
+    container: {
+      paddingTop: 50,
+    },
+    tinyLogo: {
+      width: 50,
+      height: 50,
+    },
+    logo: {
+      width: 66,
+      height: 58,
+    },
+  });
+
 
 export default class ItemList extends Component {
 
     state = {
         drinks: {}
     }
+
     cocktailDB = new CocktailDB();
 
-    
-    onLoaded = (newFilters) => {
-        this.setState((prevState) => {
+
+    onLoaded = (newDrinks) => {
+        this.setState(() => {
             return {
-                filters: newFilters,
+                drinks: newDrinks,
             };
         })
     };
 
     addDrinks(resource) {
-        console.log(this.props.route.params)
-        let info = this.props.route.params;
-        resource.getByFilter().then(item => {
-
-            let result = items.drinks.map(drink => {
-                return { name: drink.strDrink, image: strDrinkThumb + '/preview' };
-            })
-            this.onLoaded(result);
-            console.log(result)
-        }).catch(e => console.log(e + '_______'));
+        let info = this.props.route.params ? this.props.route.params : {"drinks": ["Ordinary Drink"]};
+        for (let drink in info.drinks) {
+            resource.getByFilter(info.drinks[drink]).then(item => {
+                let result = item.drinks.map(drink1 => {
+                    return { name: drink1.strDrink, image: drink1.strDrinkThumb + '/preview' };
+                })
+                result.splice(20);
+                this.onLoaded(result);
+                
+            }).catch(e => console.log(e));
+        }
     }
 
     componentDidMount() {
-        this.addDrinks(this.cocktailDB); 
+        this.addDrinks(this.cocktailDB);
+    }
+
+    // componentDidUpdate(){
+    //     this.addDrinks(this.cocktailDB);
+    // }
+
+    showDrinks(drinks) {
+
+        let result = [];
+        for (let key in drinks) {
+            result.push(
+                <View>
+                    <Image style={styles.logo} source={{uri: `${drinks[key].image}`}} />
+                     <Text>{drinks[key].name}</Text>
+                </View> 
+            )
+        }
+        return result;
     }
 
     render() {
 
+        let { drinks } = this.state;
+
+        let result = this.showDrinks(drinks);
+        
+
         return (
-            <View>
-                <Text>Todo List</Text>
-            </View>
+            <ScrollView>
+                {result}
+            </ScrollView>
         );
     }
 }
