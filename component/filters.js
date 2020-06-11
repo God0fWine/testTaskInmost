@@ -9,15 +9,24 @@ export default class Filter extends Component {
 
     state = {
         filters: {},
+        // drinks: {}
     };
 
-    onLoaded = (newFilters) => {
-        this.setState((prevState) => {
+    onLoadedFilters = (newFilters) => {
+        this.setState(() => {
             return {
                 filters: newFilters,
             };
         })
     };
+
+    // onLoadedDrinks = (newDrinks) => {
+    //     this.setState(() => {
+    //         return {
+    //             drinks: newDrinks
+    //         };
+    //     })
+    // };
 
     addFilters(resource) {
         resource.getFilters().then(items => {
@@ -25,12 +34,12 @@ export default class Filter extends Component {
             let result = items.drinks.map(filter => {
                 return { label: filter.strCategory, checked: true };
             })
-            this.onLoaded(result);
+            this.onLoadedFilters(result);
         }).catch(e => console.log(e));
     }
 
     componentDidMount() {
-        this.addFilters(this.cocktailDB); 
+        this.addFilters(this.cocktailDB);
     }
 
     unChecked(filters) {
@@ -42,9 +51,9 @@ export default class Filter extends Component {
                 iconRight
                 checked={filters[key].checked}
                 onPress={() => {
-                    let filter = {...filters};
+                    let filter = { ...filters };
                     filter[key].checked = !filter[key].checked;
-                    this.setState({filter});
+                    this.setState({ filter });
                 }}
             />)
         }
@@ -53,21 +62,42 @@ export default class Filter extends Component {
 
     apply() {
 
-        let {filters} = this.state;
+        let { filters } = this.state;
         let result = [];
-        for(let item in filters){
-            if(filters[item].checked == true){
+        for (let item in filters) {
+            if (filters[item].checked == true) {
                 result.push(filters[item].label);
             }
         }
-        this.props.navigation.navigate('Drinks', {
-            drinks: result
-        })
-    }
+
+
+        // for (let drink in result) {
+        //     this.cocktailDB.getByFilter(result[drink]).then(item => {
+        //         let resultDrink = item.drinks.map(drink1 => {
+        //             return { name: drink1.strDrink, image: drink1.strDrinkThumb + '/preview' };
+        //         })
+
+        //         // this.onLoadedDrinks(resultDrink);
+
+        //         this.props.navigation.navigate('Drinks', {
+        //             drinks: resultDrink
+        //         })
+        //     }).catch(e => console.log(e));
+
+            this.props.navigation.navigate('Drinks', {
+                drinks: result
+            })
+
+            console.log(result)
+        }
+
+    
+    
+
 
     render() {
 
-        
+
         const { filters } = this.state;
         let result = this.unChecked(filters);
 
