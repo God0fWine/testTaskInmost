@@ -36,7 +36,7 @@ export default class ItemList extends Component {
             console.log(drinks)
             return {
                 drinks: [...drinks, ...newDrinks]
-                //  drinks: newDrinks
+                //  drinks: [...newDrinks]
             };
         })
     };
@@ -49,7 +49,6 @@ export default class ItemList extends Component {
                     return { name: drink1.strDrink, image: drink1.strDrinkThumb + '/preview' };
                 })
                 this.onLoaded(result, info.drinks[drink]);
-                console.log(result)
             }).catch(e => console.log(e));
         }
     }
@@ -58,14 +57,13 @@ export default class ItemList extends Component {
         this.addDrinks(this.cocktailDB);
     }
 
-    // componentDidUpdate() {
-    //     let { drinks } = this.state;
-
-    //     this.showDrinks(drinks);
+    // componentDidUpdate(prevState) {
+    //     if (prevState.drinks != this.state.drinks)
+    //         this.addDrinks(this.cocktailDB);
     // }
 
     componentWillReceiveProps() {
-            this.addDrinks(this.cocktailDB);
+        this.addDrinks(this.cocktailDB);
     }
 
     // getSnapshotBeforeUpdate(prevState) {
