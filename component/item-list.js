@@ -30,7 +30,7 @@ export default class ItemList extends Component {
     cocktailDB = new CocktailDB();
 
 
-    onLoaded = (newDrinks, category) => {
+    onLoaded = (newDrinks) => {
         this.setState(({ drinks }) => {
 
             console.log(drinks)
@@ -57,14 +57,18 @@ export default class ItemList extends Component {
         this.addDrinks(this.cocktailDB);
     }
 
-    // componentDidUpdate(prevState) {
-    //     if (prevState.drinks != this.state.drinks)
-    //         this.addDrinks(this.cocktailDB);
-    // }
-
-    componentWillReceiveProps() {
-        this.addDrinks(this.cocktailDB);
+    componentDidUpdate(prevProps) {
+        if(prevProps.route.params){
+            if(prevProps.route.params.drinks[0] !== this.props.route.params.drinks[0]){
+                this.setState({drinks: []})
+                 this.addDrinks(this.cocktailDB);
+            }
+        }
     }
+
+    // componentWillReceiveProps() {
+    //     this.addDrinks(this.cocktailDB);
+    // }
 
     // getSnapshotBeforeUpdate(prevState) {
     //     if (this.state.drinks.length != prevState.length)

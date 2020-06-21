@@ -9,7 +9,6 @@ export default class Filter extends Component {
 
     state = {
         filters: {},
-        // drinks: {}
     };
 
     onLoadedFilters = (newFilters) => {
@@ -19,14 +18,6 @@ export default class Filter extends Component {
             };
         })
     };
-
-    // onLoadedDrinks = (newDrinks) => {
-    //     this.setState(() => {
-    //         return {
-    //             drinks: newDrinks
-    //         };
-    //     })
-    // };
 
     addFilters(resource) {
         resource.getFilters().then(items => {
@@ -69,34 +60,14 @@ export default class Filter extends Component {
                 result.push(filters[item].label);
             }
         }
+        this.props.navigation.navigate('Drinks', {
+            drinks: result
+        })
 
-
-        // for (let drink in result) {
-        //     this.cocktailDB.getByFilter(result[drink]).then(item => {
-        //         let resultDrink = item.drinks.map(drink1 => {
-        //             return { name: drink1.strDrink, image: drink1.strDrinkThumb + '/preview' };
-        //         })
-
-        //         // this.onLoadedDrinks(resultDrink);
-
-        //         this.props.navigation.navigate('Drinks', {
-        //             drinks: resultDrink
-        //         })
-        //     }).catch(e => console.log(e));
-
-            this.props.navigation.navigate('Drinks', {
-                drinks: result
-            })
-
-            console.log(result)
-        }
-
-    
-    
-
+        // console.log(result)
+    }
 
     render() {
-
 
         const { filters } = this.state;
         let result = this.unChecked(filters);
